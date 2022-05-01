@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "healthCheckup_jwtPrivateKey",
+  "db": "healthCheckup_db"
+}
