@@ -52,6 +52,15 @@ async function getAllAllocatedSlotsInCheckupVenue(checkupVenueId) {
   return employeeSlots;
 }
 
+async function getAllAllocatedSlotsByAnEmployee(checkupVenueId, employeeId) {
+  const employeeSlots = await EmployeeSlot.find({
+    employeeId: employeeId,
+    checkupVenueId: checkupVenueId,
+    status: "ALLOCATED",
+  });
+  return employeeSlots;
+}
+
 async function deleteSlotsWithCheckupVenueId(checkupVenueId) {
   return await EmployeeSlot.deleteMany({ checkupVenueId: checkupVenueId });
 }
@@ -63,5 +72,6 @@ module.exports = {
   cancelSlot,
   markSlotAsCompleted,
   getAllAllocatedSlotsInCheckupVenue,
+  getAllAllocatedSlotsByAnEmployee,
   deleteSlotsWithCheckupVenueId
 };

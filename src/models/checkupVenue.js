@@ -14,7 +14,7 @@ const checkupVenueSchema = new mongoose.Schema({
     min: 5,
     max: 255,
   },
-  organizationId: {
+  organization: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Organization",
   },

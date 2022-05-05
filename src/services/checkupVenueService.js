@@ -1,9 +1,29 @@
 const { CheckupVenue, validateCheckupVenue } = require("../models/checkupVenue");
 const checkupVenueDataAccessor = require("../dataAccessLayer/checkupVenueDataAccessor");
 const employeeSlotDataAccessor = require("../dataAccessLayer/employeeSlotDataAccessor");
+const organizationDataAccessor = require("../dataAccessLayer/organizationDataAccessor");
 
 async function getAllCheckupVenues(req, res) {
   const checkupVenues = await checkupVenueDataAccessor.getAllCheckupVenues();
+  return res.status(200).send(checkupVenues);
+}
+
+async function getCheckupVenueById(req, res) {
+  const checkupVenue = await checkupVenueDataAccessor.getCheckupVenueById(req.params.venueId);
+  if(!checkupVenue) {
+    return res.status(400).send("No checkup venue with the given ID was found");
+  }
+
+  return res.status(200).send(checkupVenue);
+}
+
+async function getAllCheckupVenuesOfOrganization(req, res) {
+  const organization = await organizationDataAccessor.getOrganizationById(req.params.organization);
+  if(!organization) {
+    return res.status(400).send("No organization with the given ID was found");
+  }
+
+  const checkupVenues = await checkupVenueDataAccessor.getAllCheckupVenuesOfOrganization(req.params.organization);
   return res.status(200).send(checkupVenues);
 }
 
@@ -26,7 +46,9 @@ async function deleteCheckupVenue(req, res) {
 }
 
 module.exports = {
+  getCheckupVenueById,
   getAllCheckupVenues,
+  getAllCheckupVenuesOfOrganization,
   createNewCheckupVenue,
   deleteCheckupVenue
 };

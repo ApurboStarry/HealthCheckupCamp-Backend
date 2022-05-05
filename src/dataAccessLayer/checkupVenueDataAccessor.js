@@ -1,20 +1,30 @@
 const { CheckupVenue, validateCheckupVenue } = require("../models/checkupVenue");
+const objectIdChecker = require('../utils/objectIdChecker');
 
 async function getAllCheckupVenues() {
-  const checkupVenues = await CheckupVenue.find();
+  const checkupVenues = await CheckupVenue.find().populate("organization", "_id name");
   return checkupVenues;
 }
 
 async function getCheckupVenueById(id) {
-  const checkupVenue = await CheckupVenue.findById(id);
+  if(!objectIdChecker.isValidObjectId(id)) {
+    return null;
+  }
+
+  const checkupVenue = await CheckupVenue.findById(id).populate("organization", "_id name");
   return checkupVenue;
 }
 
-async function insertCheckupVenue(name, location, organizationId) {
+async function getAllCheckupVenuesOfOrganization(organization) {
+  const checkupVenues = await CheckupVenue.find({ organization });
+  return checkupVenues;
+}
+
+async function insertCheckupVenue(name, location, organization) {
   const checkupVenue = new CheckupVenue({
     name,
     location,
-    organizationId,
+    organization,
   });
   await checkupVenue.save();
 }
@@ -24,8 +34,9 @@ async function deleteCheckupVenue(checkupVenueId) {
 }
 
 module.exports = {
-  getAllCheckupVenues,
   getCheckupVenueById,
+  getAllCheckupVenues,
+  getAllCheckupVenuesOfOrganization,
   insertCheckupVenue,
   deleteCheckupVenue,
 }

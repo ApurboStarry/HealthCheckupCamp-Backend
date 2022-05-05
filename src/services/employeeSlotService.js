@@ -1,5 +1,4 @@
 const { validateEmployeeSlot } = require("../models/employeeSlot");
-const employeeDataAccessor = require("../dataAccessLayer/employeeDataAccessor");
 const checkupVenueDataAccessor = require("../dataAccessLayer/checkupVenueDataAccessor");
 const employeeSlotDataAccessor = require("../dataAccessLayer/employeeSlotDataAccessor");
 
@@ -81,10 +80,22 @@ async function getAllAllocatedSlotsInCheckupVenue(req, res) {
   return res.status(200).send(employeeSlots);
 }
 
+async function getAllAllocatedSlotsByAnEmployee(req, res) {
+  const checkupVenueId = req.params.checkupVenueId;
+  const checkupVenue = await checkupVenueDataAccessor.getCheckupVenueById(checkupVenueId);
+  if(!checkupVenue) {
+    return res.status(400).send("No checkup venue with the given ID was found");
+  }
+
+  const employeeSlots = await employeeSlotDataAccessor.getAllAllocatedSlotsByAnEmployee(checkupVenueId, req.user._id);
+  return res.status(200).send(employeeSlots);
+}
+
 module.exports = {
   allocateSlot,
   rescheduleSlot,
   cancelSlot,
   markSlotAsCompleted,
-  getAllAllocatedSlotsInCheckupVenue
+  getAllAllocatedSlotsInCheckupVenue,
+  getAllAllocatedSlotsByAnEmployee
 }

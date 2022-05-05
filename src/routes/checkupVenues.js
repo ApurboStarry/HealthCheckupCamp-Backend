@@ -9,6 +9,15 @@ router.get("/", async (req, res) => {
   return await checkupVenueService.getAllCheckupVenues(req, res);
 });
 
+router.get("/:venueId", async(req, res) => {
+  return await checkupVenueService.getCheckupVenueById(req, res);
+})
+
+// get all the checkup venues of an organization
+router.get("/organization/:organization", async (req, res) => {
+  return await checkupVenueService.getAllCheckupVenuesOfOrganization(req, res);
+});
+
 // create new checkup venue
 // only organization can create one
 router.post("/", organizationAuth, async (req, res) => {

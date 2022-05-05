@@ -27,7 +27,7 @@ const organizationSchema = new mongoose.Schema({
 
 organizationSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
-    { _id: this._id, email: this.email },
+    { _id: this._id, email: this.email, userType: "organization" },
     config.get("jwtPrivateKey")
   );
   return token;

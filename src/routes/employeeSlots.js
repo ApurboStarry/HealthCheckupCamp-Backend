@@ -30,4 +30,9 @@ router.get("/allAllocatedSlots/:checkupVenueId", organizationAuth, async (req, r
   return await employeeSlotService.getAllAllocatedSlotsInCheckupVenue(req, res);
 })
 
+// all allocated slots allocated by an employee
+router.get("/allAllocatedSlotsByAnEmployee/:checkupVenueId", employeeAuth, async (req, res) => {
+  return await employeeSlotService.getAllAllocatedSlotsByAnEmployee(req, res);
+});
+
 module.exports = router;
